@@ -35,7 +35,7 @@ export const analyzeWaste = createServerFn({ method: "POST" })
                 properties: {
                   recognized: { type: "BOOLEAN" },
                   name: { type: "STRING" },
-                  category: { type: "STRING", enum: ["organik", "plastik", "kertas", "kaca", "logam", ""] },
+                  category: { type: "STRING", enum: ["organik", "plastik", "kertas", "kaca", "logam", "tidak_dikenali"] },
                   reason: { type: "STRING" },
                   tips: { type: "ARRAY", items: { type: "STRING" } },
                 },
