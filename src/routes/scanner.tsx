@@ -25,7 +25,17 @@ function Scanner() {
   const load = (file?: File) => {
     if (!file || !file.type.startsWith("image/")) return;
     const r = new FileReader();
-    r.onload = () => { setPreview(r.result as string); setName(file.name); };
+    r.onload = () => {
+      const im = new Image();
+      im.onload = () => {
+        const s = Math.min(1, 1280 / Math.max(im.width, im.height));
+        const c = document.createElement("canvas");
+        c.width = im.width * s; c.height = im.height * s;
+        c.getContext("2d")?.drawImage(im, 0, 0, c.width, c.height);
+        setPreview(c.toDataURL("image/jpeg", 0.85)); setName(file.name);
+      };
+      im.src = r.result as string;
+    };
     r.readAsDataURL(file);
   };
 
