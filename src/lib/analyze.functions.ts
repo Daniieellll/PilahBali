@@ -22,9 +22,10 @@ export const analyzeWaste = createServerFn({ method: "POST" })
     const mime = meta.slice(5, meta.indexOf(";"));
     try {
       const res = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
         {
           method: "POST",
+          signal: AbortSignal.timeout(45000),
           headers: { "Content-Type": "application/json", "x-goog-api-key": key },
           body: JSON.stringify({
             contents: [{ parts: [{ text: PROMPT }, { inline_data: { mime_type: mime, data: b64 } }] }],
