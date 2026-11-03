@@ -18,7 +18,7 @@ export const analyzeWaste = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<AnalysisResult> => {
     const key = process.env["GEMINI_API_KEY"];
     if (!key) return { ok: false, error: "Kunci AI belum dikonfigurasi." };
-    const [meta, b64] = data.image.split(",");
+    const [meta = "", b64] = data.image.split(",");
     const mime = meta.slice(5, meta.indexOf(";"));
     if (!b64 || !mime) return { ok: false, error: "Data gambar tidak terbaca." };
     console.log("[analyze] key set:", true, "mime:", mime, "base64 KB:", Math.round(b64.length / 1024));
