@@ -10,6 +10,8 @@ export const Route = createFileRoute("/scanner")({
       { name: "description", content: "Unggah foto sampah untuk dianalisis oleh SORTARA AI." },
       { property: "og:title", content: "Scanner Sampah — SORTARA AI" },
       { property: "og:description", content: "Unggah foto sampah dan mulai analisis." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Scanner,

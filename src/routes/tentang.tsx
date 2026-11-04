@@ -9,6 +9,8 @@ export const Route = createFileRoute("/tentang")({
       { name: "description", content: "Misi SORTARA AI membantu mengurangi masalah sampah di Bali." },
       { property: "og:title", content: "Tentang Kami — SORTARA AI" },
       { property: "og:description", content: "Teknologi untuk Bali yang lebih bersih." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Tentang,
