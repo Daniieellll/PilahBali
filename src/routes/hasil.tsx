@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, HelpCircle, ListChecks, Loader2, MessageSquareText, Package, Tag } from "lucide-react";
+import { AlertTriangle, HelpCircle, ListChecks, Loader2, Tag } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/components/site-layout";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,9 @@ export const Route = createFileRoute("/hasil")({
   head: () => ({
     meta: [
       { title: "Hasil Analisis — SORTARA AI" },
-      { name: "description", content: "Lihat nama benda, kategori sampah, dan petunjuk pemilahan." },
+      { name: "description", content: "Lihat benda yang dikenali, material, status penggunaan, dan rekomendasi pengelolaan SORTARA SMART ACTION." },
       { property: "og:title", content: "Hasil Analisis — SORTARA AI" },
-      { property: "og:description", content: "Nama benda, kategori, dan petunjuk pemilahan sampah." },
+      { property: "og:description", content: "Pengenalan benda, material, status sampah atau penggunaan, dan rekomendasi pengelolaan." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -66,7 +66,7 @@ function Hasil() {
 
   return (
     <>
-      <PageHeader eyebrow="Hasil" title="Hasil analisis sampah" desc="Nama benda, kategori sampah, alasan, dan saran pemilahan dari AI." />
+      <PageHeader eyebrow="Hasil" title="Hasil analisis sampah" desc="Nama benda, material, status, dan saran pengelolaan dari AI." />
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="grid gap-6 md:grid-cols-[1fr_1.2fr]">
           <div className="grid min-h-72 self-start place-items-center overflow-hidden rounded-3xl border border-border bg-muted">
@@ -97,15 +97,23 @@ function Hasil() {
             )}
             {result?.ok && result.recognized && (
               <>
-                {result.mixed && <h2 className="text-xl font-semibold">Beberapa objek sampah teridentifikasi</h2>}
+                {result.mixed && <h2 className="text-xl font-semibold">Beberapa objek teridentifikasi</h2>}
                 {result.objects.map((object, index) => {
-                  const cat = categories.find((c) => c.key === object.category);
+                  const cat = object.status === "WASTE" ? categories.find((c) => c.key === object.category?.toLowerCase()) : undefined;
+                  const statusLabel = { WASTE: "WASTE · Sampah", NON_WASTE: "NON_WASTE · Bukan sampah", UNKNOWN: "UNKNOWN · Status belum pasti" } as const;
                   const residueLabel = { sisa_makanan: "Sisa makanan", cairan: "Cairan", kotoran: "Kotoran" } as const;
                   return <div key={`${object.name}-${index}`} className="grid gap-4">
                     <Section n="1" title="AI Waste Recognition">
                       <p className="text-sm text-muted-foreground">Nama objek</p>
                       <p className="font-display text-2xl font-bold break-words">{object.name}</p>
-                      <span className={`mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-semibold ${cat?.color ?? "bg-secondary"}`}>{cat?.emoji} {cat?.name ?? object.category}</span>
+                      <span className="mt-3 inline-flex rounded-full bg-secondary px-4 py-1.5 text-sm font-semibold">{statusLabel[object.status]}</span>
+                      <dl className="mt-3 grid gap-2 text-sm">
+                        <div><dt className="font-medium">Material utama</dt><dd>{object.materials.primary ?? "Belum dapat dipastikan dari foto"}</dd></div>
+                        <div><dt className="font-medium">Material tambahan</dt><dd>{object.materials.additional.length > 0 ? object.materials.additional.join(", ") : "Tidak teridentifikasi dengan yakin"}</dd></div>
+                      </dl>
+                      {object.status === "WASTE" && <div className="mt-3"><p className="text-sm text-muted-foreground">Kategori sampah</p><span className={`mt-1 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-semibold ${cat?.color ?? "bg-secondary"}`}>{cat?.emoji} {cat?.name ?? object.category ?? "Belum dapat dipastikan"}</span></div>}
+                      {object.status === "NON_WASTE" && <p className="mt-3 text-sm text-muted-foreground">Benda belum tentu sampah dan dapat digunakan kembali jika kondisinya layak. Fungsi sebenarnya perlu diperiksa langsung.</p>}
+                      {object.status === "UNKNOWN" && <p className="mt-3 text-sm text-muted-foreground">Benda dikenali, tetapi belum dapat dipastikan apakah merupakan sampah. Periksa fungsi dan kondisinya langsung; kategori tidak ditentukan.</p>}
                       <p className="mt-3"><span className="font-medium">Alasan: </span>{object.reason}</p>
                     </Section>
                     <Section n="2" title="Smart Waste Check">
@@ -115,8 +123,8 @@ function Hasil() {
                       {!object.condition.certain && <p className="mt-3 rounded-xl bg-muted p-3 text-sm text-muted-foreground">Kondisi tidak dapat dipastikan sepenuhnya dari foto. Periksa langsung bagian dalam atau yang tidak terlihat.</p>}
                     </Section>
                     <Section n="3" title="Bali Waste Guide">
-                      <p className="text-sm font-medium">Saran pengelolaan dari AI</p>
-                      <ul className="mt-1 list-disc space-y-1 pl-5">{object.tips.map((t) => <li key={t}>{t}</li>)}</ul>
+                      <p className="text-sm font-medium">{object.status === "WASTE" ? "Saran pengelolaan dari AI" : object.status === "NON_WASTE" ? "Saran penggunaan kembali dari AI" : "Pemeriksaan sebelum pengelolaan"}</p>
+                      {object.tips.length > 0 ? <ul className="mt-1 list-disc space-y-1 pl-5">{object.tips.map((t) => <li key={t}>{t}</li>)}</ul> : <p className="mt-1 text-sm text-muted-foreground">Periksa kondisi dan fungsi benda secara langsung sebelum menentukan pengelolaannya.</p>}
                       {cat && <><p className="mt-3 text-sm font-medium">Panduan pemilahan {cat.name}</p><ul className="mt-1 list-disc space-y-1 pl-5">{cat.tips.map((t) => <li key={t}>{t}</li>)}</ul></>}
                       <p className="mt-3 text-xs text-muted-foreground">Lokasi bank sampah dan aturan daerah di Bali belum ditampilkan karena belum ada sumber terverifikasi. Tanyakan ke desa/banjar atau dinas lingkungan setempat.</p>
                     </Section>
@@ -125,7 +133,7 @@ function Hasil() {
                 {(result.limitations || result.unclassified.length > 0) && <div role="status" className="rounded-2xl border border-sun bg-sun/20 p-5 text-sm text-sun-foreground">
                   <p className="font-semibold">Keterbatasan analisis</p>
                   {result.limitations && <p className="mt-1">{result.limitations}</p>}
-                  {result.unclassified.length > 0 && <p className="mt-2">Belum dapat dikategorikan dengan yakin: {result.unclassified.join(", ")}.</p>}
+                   {result.unclassified.length > 0 && <p className="mt-2">Objek belum dapat dikenali dengan yakin: {result.unclassified.join(", ")}. Unggah foto lebih jelas.</p>}
                 </div>}
                 <p className="text-xs text-muted-foreground">Hasil dari AI bisa keliru. Cek kembali dengan <Link to="/panduan" className="underline">Panduan Sampah</Link>.</p>
               </>

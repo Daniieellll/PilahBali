@@ -1,69 +1,88 @@
 import { z } from "zod";
 
-export const NON_WASTE_MESSAGE = "Gambar ini bukan sampah yang dapat kami identifikasi. Silakan unggah foto sampah seperti plastik, kertas, logam, kaca, atau organik.";
-export const RETAKE_MESSAGE = "Foto buram, terlalu gelap, atau objek tidak terlihat jelas. Silakan ambil foto ulang dengan pencahayaan cukup dan fokus pada sampah.";
-export const UNCERTAIN_MESSAGE = "AI belum yakin bahwa objek ini adalah sampah yang dapat diidentifikasi. Silakan ambil foto ulang lebih dekat dan lebih jelas; kategori tidak ditentukan.";
+export const RETAKE_MESSAGE = "Foto buram, terlalu gelap, atau objek tidak terlihat jelas. Silakan ambil foto ulang dengan pencahayaan cukup dan fokus pada benda.";
+export const UNCERTAIN_MESSAGE = "AI belum dapat mengenali objek dengan yakin. Silakan unggah foto yang lebih jelas dan lebih dekat.";
+export const CONDITION_UNSURE = "Kondisi tidak dapat dipastikan dari foto. Periksa langsung bagian dalam, bagian yang tidak terlihat, dan fungsi benda.";
 
-const categorySchema = z.enum(["organik", "plastik", "kertas", "kaca", "logam"]);
+const confidenceSchema = z.enum(["high", "medium", "low"]);
+const textSchema = z.string().trim().min(1).max(1500);
+const conditionSchema = z.object({
+  summary: z.string().trim().max(1500),
+  residues: z.array(z.enum(["sisa_makanan", "cairan", "kotoran"])).max(3),
+  certain: z.boolean(),
+  actions: z.array(textSchema).max(4),
+});
 const objectSchema = z.object({
-  name: z.string().trim().min(1),
-  isWaste: z.boolean(),
-  confidence: z.enum(["high", "medium", "low"]),
-  category: z.union([categorySchema, z.literal("tidak_dikenali")]),
-  reason: z.string().trim().min(1),
-  tips: z.array(z.string().trim().min(1)).max(4),
-  condition: z.object({
-    summary: z.string().trim(),
-    residues: z.array(z.enum(["sisa_makanan", "cairan", "kotoran"])).max(3),
-    certain: z.boolean(),
-    actions: z.array(z.string().trim().min(1)).max(4),
-  }).optional(),
+  name: textSchema,
+  confidence: confidenceSchema,
+  status: z.enum(["WASTE", "NON_WASTE", "UNKNOWN"]),
+  statusConfidence: confidenceSchema,
+  materials: z.object({
+    primary: textSchema.nullable(),
+    additional: z.array(textSchema).max(8),
+    confidence: confidenceSchema,
+  }),
+  // Categories are extensible; recognition never depends on the guide's five categories.
+  category: textSchema.nullable(),
+  categoryConfidence: confidenceSchema,
+  reason: textSchema,
+  tips: z.array(textSchema).max(4),
+  condition: conditionSchema.optional(),
 });
 export const providerResultSchema = z.object({
-  status: z.enum(["waste", "non_waste", "unclear", "uncertain"]),
   imageQuality: z.enum(["clear", "blurred", "dark", "obscured"]),
-  containsWaste: z.boolean(),
   multipleObjects: z.boolean(),
   objects: z.array(objectSchema).max(12),
-  limitations: z.string().trim(),
+  limitations: z.string().trim().max(4000),
 });
 
-export type WasteCondition = { summary: string; residues: ("sisa_makanan" | "cairan" | "kotoran")[]; certain: boolean; actions: string[] };
-export const CONDITION_UNSURE = "Kondisi kebersihan tidak dapat dipastikan dari foto. Periksa langsung bagian dalam dan bagian yang tidak terlihat sebelum memilah.";
-export type WasteObject = { name: string; category: z.infer<typeof categorySchema>; reason: string; tips: string[]; condition: WasteCondition };
+export type WasteCondition = z.infer<typeof conditionSchema>;
+export type RecognizedObject = {
+  name: string;
+  status: "WASTE" | "NON_WASTE" | "UNKNOWN";
+  materials: { primary: string | null; additional: string[]; confidence: z.infer<typeof confidenceSchema> };
+  category: string | null;
+  reason: string;
+  tips: string[];
+  condition: WasteCondition;
+};
 export type AnalysisResult =
-  | { ok: true; recognized: true; name: string; category: WasteObject["category"]; reason: string; tips: string[]; objects: WasteObject[]; mixed: boolean; limitations: string; unclassified: string[] }
-  | { ok: true; recognized: false; status: "non_waste" | "unclear" | "uncertain"; message: string }
+  | { ok: true; recognized: true; objects: RecognizedObject[]; mixed: boolean; limitations: string; unclassified: string[] }
+  | { ok: true; recognized: false; status: "unclear" | "uncertain"; message: string }
   | { ok: false; error: string };
 
 export function normalizeAnalysis(input: unknown): AnalysisResult {
   const parsed = providerResultSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Respons AI tidak lengkap atau tidak valid. Silakan coba lagi." };
   const r = parsed.data;
-  if (r.imageQuality !== "clear" || r.status === "unclear")
+  if (r.imageQuality !== "clear")
     return { ok: true, recognized: false, status: "unclear", message: RETAKE_MESSAGE };
-  if (r.status === "non_waste")
-    return { ok: true, recognized: false, status: "non_waste", message: NON_WASTE_MESSAGE };
-  if (r.status !== "waste" || !r.containsWaste)
-    return { ok: true, recognized: false, status: "uncertain", message: UNCERTAIN_MESSAGE };
-  const objects: WasteObject[] = [];
+  const objects: RecognizedObject[] = [];
   const unclassified: string[] = [];
   for (const item of r.objects) {
-    if (!item.isWaste) continue;
-    const category = categorySchema.safeParse(item.category);
-    if (item.confidence !== "high" || !category.success || item.tips.length === 0) {
+    if (item.confidence !== "high") {
       unclassified.push(item.name);
       continue;
     }
-    objects.push({ name: item.name, category: category.data, reason: item.reason, tips: item.tips, condition: item.condition && item.condition.summary ? item.condition : { summary: CONDITION_UNSURE, residues: [], certain: false, actions: [] } });
+    const status = item.statusConfidence === "high" ? item.status : "UNKNOWN";
+    const category = status === "WASTE" && item.categoryConfidence === "high" ? item.category : null;
+    const materials = item.materials.confidence === "high"
+      ? item.materials
+      : { ...item.materials, primary: null, additional: [] };
+    objects.push({
+      name: item.name, status, materials, category,
+      reason: item.reason,
+      // Low-confidence status must not expose provider disposal advice as a conclusion.
+      tips: item.statusConfidence === "high" ? item.tips : [],
+      condition: item.condition?.summary ? item.condition : { summary: CONDITION_UNSURE, residues: [], certain: false, actions: [] },
+    });
   }
-  const first = objects[0];
-  if (!first) return { ok: true, recognized: false, status: "uncertain", message: UNCERTAIN_MESSAGE };
+  if (!objects.length) return { ok: true, recognized: false, status: "uncertain", message: UNCERTAIN_MESSAGE };
   const mixed = r.multipleObjects || objects.length > 1 || unclassified.length > 0;
   return {
-    ok: true, recognized: true, ...first, objects, mixed, unclassified,
+    ok: true, recognized: true, objects, mixed, unclassified,
     limitations: mixed
-      ? [r.limitations, "Hanya objek sampah yang terlihat jelas dan dikenali dengan yakin yang dikategorikan. Bahan yang tertutup atau tidak pasti tidak dikategorikan; foto tiap benda secara terpisah untuk hasil lebih rinci."].filter(Boolean).join(" ")
+      ? [r.limitations, "Hanya objek yang terlihat jelas dan dikenali dengan yakin yang ditampilkan. Material atau status yang tidak pasti tidak dipaksakan; foto tiap benda secara terpisah untuk hasil lebih rinci."].filter(Boolean).join(" ")
       : r.limitations,
   };
 }
