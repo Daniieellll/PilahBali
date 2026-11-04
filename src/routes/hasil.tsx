@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { AlertTriangle, HelpCircle, ListChecks, Loader2, MessageSquareText, Package, Tag } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/components/site-layout";
+import { Button } from "@/components/ui/button";
 import { analyzeWaste, type AnalysisResult } from "@/lib/analyze.functions";
 import { categories } from "@/lib/waste-guide";
 
@@ -13,6 +14,8 @@ export const Route = createFileRoute("/hasil")({
       { name: "description", content: "Lihat nama benda, kategori sampah, dan petunjuk pemilahan." },
       { property: "og:title", content: "Hasil Analisis — SORTARA AI" },
       { property: "og:description", content: "Nama benda, kategori, dan petunjuk pemilahan sampah." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Hasil,
@@ -52,8 +55,6 @@ function Hasil() {
     if (s && !started.current) { started.current = true; run(s); }
   }, [run]);
 
-  const cat = result?.ok && result.recognized ? categories.find((c) => c.key === result.category) : undefined;
-
   return (
     <>
       <PageHeader eyebrow="Hasil" title="Hasil analisis sampah" desc="Nama benda, kategori sampah, alasan, dan saran pemilahan dari AI." />
@@ -77,29 +78,40 @@ function Hasil() {
               <div className="flex gap-3 rounded-2xl border border-destructive/40 bg-destructive/10 p-5 text-sm">
                 <AlertTriangle className="h-5 w-5 shrink-0 text-destructive" />
                 <div className="flex-1"><p className="font-semibold">Analisis gagal</p><p className="text-muted-foreground">{result.error}</p></div>
-                {img && <button onClick={() => run(img)} className="font-semibold text-primary underline">Coba lagi</button>}
+                {img && <Button variant="link" onClick={() => run(img)}>Coba lagi</Button>}
               </div>
             )}
             {result?.ok && !result.recognized && (
-              <div className="flex gap-3 rounded-2xl border border-sun bg-sun/20 p-5 text-sm text-sun-foreground">
+              <div role="status" className="flex gap-3 rounded-2xl border border-sun bg-sun/20 p-5 text-sm text-sun-foreground">
                 <HelpCircle className="h-5 w-5 shrink-0" /><p>{result.message}</p>
               </div>
             )}
             {result?.ok && result.recognized && (
               <>
-                <Field icon={Package} label="Nama Benda"><p className="font-display text-2xl font-bold">{result.name}</p></Field>
-                <Field icon={Tag} label="Kategori Sampah">
-                  <span className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-semibold ${cat?.color ?? "bg-secondary"}`}>{cat?.emoji} {cat?.name ?? result.category}</span>
-                </Field>
-                <Field icon={MessageSquareText} label="Alasan Klasifikasi"><p>{result.reason}</p></Field>
-                <Field icon={ListChecks} label="Saran Pemilahan">
-                  <ul className="list-disc space-y-1 pl-5">{result.tips.map((t) => <li key={t}>{t}</li>)}</ul>
-                </Field>
+                {result.mixed && <h2 className="text-xl font-semibold">Beberapa objek sampah teridentifikasi</h2>}
+                {result.objects.map((object, index) => {
+                  const cat = categories.find((c) => c.key === object.category);
+                  return <div key={`${object.name}-${index}`} className="grid gap-4">
+                    <Field icon={Package} label="Nama Benda"><p className="font-display text-2xl font-bold break-words">{object.name}</p></Field>
+                    <Field icon={Tag} label="Kategori Sampah">
+                      <span className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-semibold ${cat?.color ?? "bg-secondary"}`}>{cat?.emoji} {cat?.name ?? object.category}</span>
+                    </Field>
+                    <Field icon={MessageSquareText} label="Alasan Klasifikasi"><p>{object.reason}</p></Field>
+                    <Field icon={ListChecks} label="Saran Pemilahan">
+                      <ul className="list-disc space-y-1 pl-5">{object.tips.map((t) => <li key={t}>{t}</li>)}</ul>
+                    </Field>
+                  </div>;
+                })}
+                {(result.limitations || result.unclassified.length > 0) && <div role="status" className="rounded-2xl border border-sun bg-sun/20 p-5 text-sm text-sun-foreground">
+                  <p className="font-semibold">Keterbatasan analisis</p>
+                  {result.limitations && <p className="mt-1">{result.limitations}</p>}
+                  {result.unclassified.length > 0 && <p className="mt-2">Belum dapat dikategorikan dengan yakin: {result.unclassified.join(", ")}.</p>}
+                </div>}
                 <p className="text-xs text-muted-foreground">Hasil dari AI bisa keliru. Cek kembali dengan <Link to="/panduan" className="underline">Panduan Sampah</Link>.</p>
               </>
             )}
             {!img && <Field icon={ListChecks} label="Belum ada analisis"><p className="text-muted-foreground">Unggah foto di Scanner untuk memulai.</p></Field>}
-            <Link to="/scanner" className="inline-flex justify-center rounded-full bg-brand px-6 py-3 font-semibold text-primary-foreground shadow-elegant">Scan Sampah Lain</Link>
+            <Button asChild className="h-auto whitespace-normal rounded-full bg-brand px-6 py-3 font-semibold shadow-elegant"><Link to="/scanner">{result?.ok && !result.recognized ? "Unggah Foto Lain" : "Scan Sampah Lain"}</Link></Button>
           </div>
         </div>
       </section>

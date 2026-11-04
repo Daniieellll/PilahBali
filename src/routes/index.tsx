@@ -8,6 +8,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Platform edukasi pemilahan sampah berbasis AI untuk masyarakat Bali." },
       { property: "og:title", content: "SORTARA AI — Scan Smart, Sort Right, Save Bali" },
       { property: "og:description", content: "Pindai sampah, pahami kategorinya, dan pilah dengan benar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,

@@ -10,6 +10,8 @@ export const Route = createFileRoute("/panduan")({
       { name: "description", content: "Panduan memilah sampah organik, plastik, kertas, kaca, dan logam." },
       { property: "og:title", content: "Panduan Sampah — SORTARA AI" },
       { property: "og:description", content: "Cara memilah 5 jenis sampah dengan benar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Panduan,
