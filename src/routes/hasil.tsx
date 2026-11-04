@@ -60,7 +60,7 @@ function Hasil() {
       <PageHeader eyebrow="Hasil" title="Hasil analisis sampah" desc="Nama benda, kategori sampah, alasan, dan saran pemilahan dari AI." />
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="grid gap-6 md:grid-cols-[1fr_1.2fr]">
-          <div className="grid min-h-72 place-items-center overflow-hidden rounded-3xl border border-border bg-muted">
+          <div className="grid min-h-72 self-start place-items-center overflow-hidden rounded-3xl border border-border bg-muted">
             {img ? <img src={img} alt="Foto yang diunggah" className="max-h-96 w-full object-contain" /> : (
               <div className="p-6 text-center text-sm text-muted-foreground">
                 Belum ada foto. <Link to="/scanner" className="font-semibold text-primary underline">Unggah di Scanner</Link>
