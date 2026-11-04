@@ -30,6 +30,15 @@ function Field({ icon: Icon, label, children }: { icon: typeof Tag; label: strin
   );
 }
 
+function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+      <p className="mb-3 flex items-center gap-2 font-display text-sm font-bold uppercase tracking-wide text-primary"><span className="grid h-6 w-6 place-items-center rounded-full bg-secondary text-xs">{n}</span>{title}</p>
+      {children}
+    </div>
+  );
+}
+
 function Hasil() {
   const [img, setImg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -71,7 +80,7 @@ function Hasil() {
             {loading && (
               <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-6">
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                <div><p className="font-display font-semibold">AI sedang menganalisis foto…</p><p className="text-sm text-muted-foreground">Biasanya beberapa detik.</p></div>
+                <div><p className="font-display font-semibold">SORTARA Smart Action sedang menganalisis…</p><p className="text-sm text-muted-foreground">Mengenali objek, memeriksa kondisi, dan menyiapkan panduan.</p></div>
               </div>
             )}
             {result && !result.ok && (
@@ -91,15 +100,26 @@ function Hasil() {
                 {result.mixed && <h2 className="text-xl font-semibold">Beberapa objek sampah teridentifikasi</h2>}
                 {result.objects.map((object, index) => {
                   const cat = categories.find((c) => c.key === object.category);
+                  const residueLabel = { sisa_makanan: "Sisa makanan", cairan: "Cairan", kotoran: "Kotoran" } as const;
                   return <div key={`${object.name}-${index}`} className="grid gap-4">
-                    <Field icon={Package} label="Nama Benda"><p className="font-display text-2xl font-bold break-words">{object.name}</p></Field>
-                    <Field icon={Tag} label="Kategori Sampah">
-                      <span className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-semibold ${cat?.color ?? "bg-secondary"}`}>{cat?.emoji} {cat?.name ?? object.category}</span>
-                    </Field>
-                    <Field icon={MessageSquareText} label="Alasan Klasifikasi"><p>{object.reason}</p></Field>
-                    <Field icon={ListChecks} label="Saran Pemilahan">
-                      <ul className="list-disc space-y-1 pl-5">{object.tips.map((t) => <li key={t}>{t}</li>)}</ul>
-                    </Field>
+                    <Section n="1" title="AI Waste Recognition">
+                      <p className="text-sm text-muted-foreground">Nama objek</p>
+                      <p className="font-display text-2xl font-bold break-words">{object.name}</p>
+                      <span className={`mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-semibold ${cat?.color ?? "bg-secondary"}`}>{cat?.emoji} {cat?.name ?? object.category}</span>
+                      <p className="mt-3"><span className="font-medium">Alasan: </span>{object.reason}</p>
+                    </Section>
+                    <Section n="2" title="Smart Waste Check">
+                      <p>{object.condition.summary}</p>
+                      {object.condition.residues.length > 0 && <div className="mt-3 flex flex-wrap gap-2">{object.condition.residues.map((r) => <span key={r} className="rounded-full bg-sun/30 px-3 py-1 text-xs font-semibold">Terlihat: {residueLabel[r]}</span>)}</div>}
+                      {object.condition.actions.length > 0 && <ul className="mt-3 list-disc space-y-1 pl-5">{object.condition.actions.map((t) => <li key={t}>{t}</li>)}</ul>}
+                      {!object.condition.certain && <p className="mt-3 rounded-xl bg-muted p-3 text-sm text-muted-foreground">Kondisi tidak dapat dipastikan sepenuhnya dari foto. Periksa langsung bagian dalam atau yang tidak terlihat.</p>}
+                    </Section>
+                    <Section n="3" title="Bali Waste Guide">
+                      <p className="text-sm font-medium">Saran pengelolaan dari AI</p>
+                      <ul className="mt-1 list-disc space-y-1 pl-5">{object.tips.map((t) => <li key={t}>{t}</li>)}</ul>
+                      {cat && <><p className="mt-3 text-sm font-medium">Panduan pemilahan {cat.name}</p><ul className="mt-1 list-disc space-y-1 pl-5">{cat.tips.map((t) => <li key={t}>{t}</li>)}</ul></>}
+                      <p className="mt-3 text-xs text-muted-foreground">Lokasi bank sampah dan aturan daerah di Bali belum ditampilkan karena belum ada sumber terverifikasi. Tanyakan ke desa/banjar atau dinas lingkungan setempat.</p>
+                    </Section>
                   </div>;
                 })}
                 {(result.limitations || result.unclassified.length > 0) && <div role="status" className="rounded-2xl border border-sun bg-sun/20 p-5 text-sm text-sun-foreground">

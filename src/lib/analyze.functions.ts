@@ -7,7 +7,7 @@ LANGKAH 1: Periksa kualitas: imageQuality=clear, blurred, dark, atau obscured. J
 LANGKAH 2: Tentukan apakah objek utama merupakan sampah/barang buangan relevan. Hewan, manusia, kendaraan, pemandangan, makanan siap dimakan, tumbuhan hidup, benda rumah tangga yang masih digunakan, dan benda non-sampah lainnya bukan sampah. Jika tidak ada sampah relevan: status=non_waste, containsWaste=false, objects=[]. Bahan plastik/logam pada kendaraan atau benda pakai tidak menjadikannya sampah. Jika foto jelas berfokus pada sampah dengan manusia/hewan di latar belakang, analisis hanya sampah.
 LANGKAH 3: Jika tidak yakin objek adalah sampah, status=uncertain dan jangan kategorikan. Jika sampah jelas: status=waste dan containsWaste=true. Identifikasi setiap jenis objek sampah yang terlihat, maksimal 12 jenis; multipleObjects=true jika beberapa objek/jenis terlihat. Jangan menyatukan campuran ke satu kategori.
 Untuk setiap objek, berikan name, isWaste, confidence=high/medium/low, category=organik/plastik/kertas/kaca/logam atau tidak_dikenali, reason berbasis bukti visual, dan 2-4 tips praktis. Hanya confidence=high jika status sampah DAN bahannya jelas; jangan memaksakan kategori. Objek tidak pasti harus category=tidak_dikenali. Sisa makanan, kulit buah dan daun buangan termasuk organik, tetapi makanan utuh yang masih disajikan tidak otomatis sampah.
-limitations menjelaskan objek tertutup, tidak pasti, bahan campuran, atau batas foto; untuk campuran sarankan foto terpisah. Jangan mengarang objek yang tidak terlihat, jangan memberi hasil palsu.`;
+SMART WASTE CHECK: untuk setiap objek isi condition: summary (kondisi yang TERLIHAT saja), residues (sisa_makanan/cairan/kotoran hanya jika benar-benar terlihat), certain=false jika bagian dalam/tertutup tidak terlihat atau kondisi tidak dapat dipastikan, actions 1-3 saran tindakan (mis. bilas, keringkan, buang cairan). Jangan pernah mengklaim bersih untuk bagian yang tidak terlihat.\nlimitations menjelaskan objek tertutup, tidak pasti, bahan campuran, atau batas foto; untuk campuran sarankan foto terpisah. Jangan mengarang objek yang tidak terlihat, jangan memberi hasil palsu.`;
 
 export const analyzeWaste = createServerFn({ method: "POST" })
   .inputValidator((d: { image: string }) => {
@@ -51,7 +51,13 @@ export const analyzeWaste = createServerFn({ method: "POST" })
                     category: { type: "STRING", enum: ["organik", "plastik", "kertas", "kaca", "logam", "tidak_dikenali"] },
                     reason: { type: "STRING" },
                     tips: { type: "ARRAY", items: { type: "STRING" } },
-                  }, required: ["name", "isWaste", "confidence", "category", "reason", "tips"] } },
+                    condition: { type: "OBJECT", properties: {
+                      summary: { type: "STRING" },
+                      residues: { type: "ARRAY", items: { type: "STRING", enum: ["sisa_makanan", "cairan", "kotoran"] } },
+                      certain: { type: "BOOLEAN" },
+                      actions: { type: "ARRAY", items: { type: "STRING" } },
+                    }, required: ["summary", "residues", "certain", "actions"] },
+                  }, required: ["name", "isWaste", "confidence", "category", "reason", "tips", "condition"] } },
                   limitations: { type: "STRING" },
                 },
                 required: ["status", "imageQuality", "containsWaste", "multipleObjects", "objects", "limitations"],
