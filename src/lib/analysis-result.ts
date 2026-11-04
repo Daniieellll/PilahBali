@@ -12,6 +12,12 @@ const objectSchema = z.object({
   category: z.union([categorySchema, z.literal("tidak_dikenali")]),
   reason: z.string().trim().min(1),
   tips: z.array(z.string().trim().min(1)).max(4),
+  condition: z.object({
+    summary: z.string().trim(),
+    residues: z.array(z.enum(["sisa_makanan", "cairan", "kotoran"])).max(3),
+    certain: z.boolean(),
+    actions: z.array(z.string().trim().min(1)).max(4),
+  }).optional(),
 });
 export const providerResultSchema = z.object({
   status: z.enum(["waste", "non_waste", "unclear", "uncertain"]),
@@ -22,7 +28,9 @@ export const providerResultSchema = z.object({
   limitations: z.string().trim(),
 });
 
-export type WasteObject = { name: string; category: z.infer<typeof categorySchema>; reason: string; tips: string[] };
+export type WasteCondition = { summary: string; residues: ("sisa_makanan" | "cairan" | "kotoran")[]; certain: boolean; actions: string[] };
+export const CONDITION_UNSURE = "Kondisi kebersihan tidak dapat dipastikan dari foto. Periksa langsung bagian dalam dan bagian yang tidak terlihat sebelum memilah.";
+export type WasteObject = { name: string; category: z.infer<typeof categorySchema>; reason: string; tips: string[]; condition: WasteCondition };
 export type AnalysisResult =
   | { ok: true; recognized: true; name: string; category: WasteObject["category"]; reason: string; tips: string[]; objects: WasteObject[]; mixed: boolean; limitations: string; unclassified: string[] }
   | { ok: true; recognized: false; status: "non_waste" | "unclear" | "uncertain"; message: string }
@@ -47,7 +55,7 @@ export function normalizeAnalysis(input: unknown): AnalysisResult {
       unclassified.push(item.name);
       continue;
     }
-    objects.push({ name: item.name, category: category.data, reason: item.reason, tips: item.tips });
+    objects.push({ name: item.name, category: category.data, reason: item.reason, tips: item.tips, condition: item.condition && item.condition.summary ? item.condition : { summary: CONDITION_UNSURE, residues: [], certain: false, actions: [] } });
   }
   const first = objects[0];
   if (!first) return { ok: true, recognized: false, status: "uncertain", message: UNCERTAIN_MESSAGE };
