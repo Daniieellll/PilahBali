@@ -5,9 +5,9 @@ import { PageHeader } from "@/components/site-layout";
 export const Route = createFileRoute("/tentang")({
   head: () => ({
     meta: [
-      { title: "Tentang Kami — SORTARA AI" },
-      { name: "description", content: "Misi SORTARA AI membantu mengurangi masalah sampah di Bali." },
-      { property: "og:title", content: "Tentang Kami — SORTARA AI" },
+      { title: "Tentang Kami — PilahBali" },
+      { name: "description", content: "Misi PilahBali membantu mengurangi masalah sampah di Bali." },
+      { property: "og:title", content: "Tentang Kami — PilahBali" },
       { property: "og:description", content: "Teknologi untuk Bali yang lebih bersih." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -25,7 +25,7 @@ const items = [
 function Tentang() {
   return (
     <>
-      <PageHeader eyebrow="Tentang Kami" title="Teknologi untuk Bali yang lebih bersih" desc="SORTARA AI lahir dari kepedulian terhadap masalah sampah di Bali. Kami percaya perubahan besar dimulai dari kebiasaan kecil: memilah sampah dengan benar." />
+      <PageHeader eyebrow="Tentang Kami" title="Teknologi untuk Bali yang lebih bersih" desc="PilahBali lahir dari kepedulian terhadap masalah sampah di Bali. Kami percaya perubahan besar dimulai dari kebiasaan kecil: memilah sampah dengan benar." />
       <section className="mx-auto grid max-w-6xl gap-6 px-4 py-12 md:grid-cols-3">
         {items.map((i) => (
           <div key={i.title} className="rounded-3xl border border-border bg-card p-6">
@@ -37,7 +37,7 @@ function Tentang() {
       </section>
       <section className="mx-auto max-w-6xl px-4 pb-16">
         <div className="rounded-3xl bg-brand p-8 text-primary-foreground md:p-12">
-          <h2 className="text-2xl font-bold md:text-3xl">Scan Smart, Sort Right, Save Bali.</h2>
+          <h2 className="text-2xl font-bold md:text-3xl">Kenali Sampahmu, Jaga Bali.</h2>
           <p className="mt-3 max-w-2xl opacity-90">Setiap sampah yang terpilah dengan benar adalah satu langkah menuju Pulau Dewata yang lestari.</p>
         </div>
       </section>

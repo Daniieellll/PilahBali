@@ -10,9 +10,9 @@ import { categories } from "@/lib/waste-guide";
 export const Route = createFileRoute("/hasil")({
   head: () => ({
     meta: [
-      { title: "Hasil Analisis — SORTARA AI" },
-      { name: "description", content: "Lihat benda yang dikenali, material, status penggunaan, dan rekomendasi pengelolaan SORTARA SMART ACTION." },
-      { property: "og:title", content: "Hasil Analisis — SORTARA AI" },
+      { title: "Hasil Analisis — PilahBali" },
+      { name: "description", content: "Lihat benda yang dikenali, material, status penggunaan, dan rekomendasi pengelolaan PilahBali Smart Action." },
+      { property: "og:title", content: "Hasil Analisis — PilahBali" },
       { property: "og:description", content: "Pengenalan benda, material, status sampah atau penggunaan, dan rekomendasi pengelolaan." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -80,7 +80,7 @@ function Hasil() {
             {loading && (
               <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-6">
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                <div><p className="font-display font-semibold">SORTARA Smart Action sedang menganalisis…</p><p className="text-sm text-muted-foreground">Mengenali objek, memeriksa kondisi, dan menyiapkan panduan.</p></div>
+                <div><p className="font-display font-semibold">PilahBali Smart Action sedang menganalisis…</p><p className="text-sm text-muted-foreground">Mengenali objek, memeriksa kondisi, dan menyiapkan panduan.</p></div>
               </div>
             )}
             {result && !result.ok && (

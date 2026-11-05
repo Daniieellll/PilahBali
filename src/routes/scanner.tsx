@@ -6,9 +6,9 @@ import { PageHeader } from "@/components/site-layout";
 export const Route = createFileRoute("/scanner")({
   head: () => ({
     meta: [
-      { title: "Scanner Sampah — SORTARA AI" },
-      { name: "description", content: "Unggah foto sampah untuk dianalisis oleh SORTARA AI." },
-      { property: "og:title", content: "Scanner Sampah — SORTARA AI" },
+      { title: "Scanner Sampah — PilahBali" },
+      { name: "description", content: "Unggah foto sampah untuk dianalisis oleh PilahBali." },
+      { property: "og:title", content: "Scanner Sampah — PilahBali" },
       { property: "og:description", content: "Unggah foto sampah dan mulai analisis." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

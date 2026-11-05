@@ -17,7 +17,7 @@ export function Logo() {
         <Leaf className="h-5 w-5" />
       </span>
       <span className="font-display text-lg font-bold tracking-tight">
-        SORTARA <span className="text-primary">AI</span>
+        Pilah<span className="text-primary">Bali</span>
       </span>
     </Link>
   );
@@ -71,7 +71,7 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-secondary/50">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-muted-foreground md:flex-row">
         <Logo />
-        <p>Scan Smart, Sort Right, Save Bali · © 2026 SORTARA AI</p>
+        <p>Kenali Sampahmu, Jaga Bali. · © 2026 PilahBali</p>
       </div>
     </footer>
   );

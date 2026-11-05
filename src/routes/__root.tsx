@@ -79,9 +79,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SORTARA AI" },
+      { title: "PilahBali" },
       { name: "description", content: "Platform edukasi pemilahan sampah berbasis AI untuk Bali." },
-      { property: "og:title", content: "SORTARA AI" },
+      { property: "og:title", content: "PilahBali" },
       { property: "og:description", content: "Platform edukasi pemilahan sampah berbasis AI untuk Bali." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
