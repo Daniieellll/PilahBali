@@ -6,9 +6,9 @@ import { categories } from "@/lib/waste-guide";
 export const Route = createFileRoute("/panduan")({
   head: () => ({
     meta: [
-      { title: "Panduan Sampah — SORTARA AI" },
+      { title: "Panduan Sampah — PilahBali" },
       { name: "description", content: "Panduan memilah sampah organik, plastik, kertas, kaca, dan logam." },
-      { property: "og:title", content: "Panduan Sampah — SORTARA AI" },
+      { property: "og:title", content: "Panduan Sampah — PilahBali" },
       { property: "og:description", content: "Cara memilah 5 jenis sampah dengan benar." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

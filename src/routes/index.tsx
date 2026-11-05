@@ -4,9 +4,9 @@ import { ArrowRight, BookOpen, Camera, Recycle, Sparkles } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SORTARA AI — Scan Smart, Sort Right, Save Bali" },
+      { title: "PilahBali — Kenali Sampahmu, Jaga Bali." },
       { name: "description", content: "Platform edukasi pemilahan sampah berbasis AI untuk masyarakat Bali." },
-      { property: "og:title", content: "SORTARA AI — Scan Smart, Sort Right, Save Bali" },
+      { property: "og:title", content: "PilahBali — Kenali Sampahmu, Jaga Bali." },
       { property: "og:description", content: "Pindai sampah, pahami kategorinya, dan pilah dengan benar." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -31,10 +31,10 @@ function Index() {
               <Sparkles className="h-3.5 w-3.5 text-sun-foreground" /> Edukasi sampah berbasis AI untuk Bali
             </span>
             <h1 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
-              Scan Smart, <span className="text-primary">Sort Right</span>, Save Bali.
+              Kenali Sampahmu, <span className="text-primary">Jaga Bali</span>.
             </h1>
             <p className="mt-5 max-w-lg text-lg text-muted-foreground">
-              SORTARA AI membantu masyarakat Bali mengenali jenis sampah dan memilahnya dengan benar — cukup dari satu foto.
+              PilahBali membantu masyarakat Bali mengenali jenis sampah dan memilahnya dengan benar — cukup dari satu foto.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/scanner" className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90">
@@ -64,7 +64,7 @@ function Index() {
         </div>
       </section>
       <section className="mx-auto max-w-6xl px-4 py-16 md:py-20">
-        <h2 className="text-3xl font-bold md:text-4xl">Kenapa SORTARA AI?</h2>
+        <h2 className="text-3xl font-bold md:text-4xl">Kenapa PilahBali?</h2>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {benefits.map((b) => (
             <div key={b.title} className="rounded-2xl border border-border bg-card p-6 transition hover:shadow-elegant">
