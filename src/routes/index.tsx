@@ -1,80 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, Camera, Recycle, Sparkles } from "lucide-react";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "PilahBali — Kenali Sampahmu, Jaga Bali." },
-      { name: "description", content: "Platform edukasi pemilahan sampah berbasis AI untuk masyarakat Bali." },
-      { property: "og:title", content: "PilahBali — Kenali Sampahmu, Jaga Bali." },
-      { property: "og:description", content: "Pindai sampah, pahami kategorinya, dan pilah dengan benar." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
-});
-
-const benefits = [
-  { icon: Camera, title: "Pindai dengan Foto", desc: "Unggah foto sampah dari laptop atau HP untuk dikenali." },
-  { icon: Recycle, title: "Pilah dengan Tepat", desc: "Ketahui kategori sampah dan cara memilahnya dengan benar." },
-  { icon: BookOpen, title: "Belajar Setiap Hari", desc: "Panduan lengkap organik, plastik, kertas, kaca, dan logam." },
-];
-
-function Index() {
-  return (
-    <>
-      <section className="bg-hero">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:py-24">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-primary">
-              <Sparkles className="h-3.5 w-3.5 text-sun-foreground" /> Edukasi sampah berbasis AI untuk Bali
-            </span>
-            <h1 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
-              Kenali Sampahmu, <span className="text-primary">Jaga Bali</span>.
-            </h1>
-            <p className="mt-5 max-w-lg text-lg text-muted-foreground">
-              PilahBali membantu masyarakat Bali mengenali jenis sampah dan memilahnya dengan benar — cukup dari satu foto.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/scanner" className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90">
-                Mulai Scan Sampah <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link to="/panduan" className="inline-flex items-center rounded-full border border-border bg-card px-6 py-3 font-semibold transition hover:bg-secondary">
-                Lihat Panduan
-              </Link>
-            </div>
-          </div>
-          <div className="relative">
-            <div className="rounded-3xl border border-border bg-card p-6 shadow-elegant">
-              <div className="grid aspect-[4/3] place-items-center rounded-2xl border-2 border-dashed border-primary/30 bg-secondary">
-                <div className="text-center">
-                  <Camera className="mx-auto h-12 w-12 text-primary" />
-                  <p className="mt-3 font-display font-semibold">Arahkan. Foto. Pilah.</p>
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-5 gap-2 text-center text-xs">
-                {["🍃", "🧴", "📦", "🍾", "🥫"].map((e) => (
-                  <div key={e} className="rounded-xl bg-muted py-2 text-xl">{e}</div>
-                ))}
-              </div>
-            </div>
-            <div className="absolute -bottom-4 -left-4 rounded-2xl bg-sun px-4 py-2 text-sm font-semibold text-sun-foreground shadow-elegant">5 kategori sampah</div>
-          </div>
-        </div>
-      </section>
-      <section className="mx-auto max-w-6xl px-4 py-16 md:py-20">
-        <h2 className="text-3xl font-bold md:text-4xl">Kenapa PilahBali?</h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {benefits.map((b) => (
-            <div key={b.title} className="rounded-2xl border border-border bg-card p-6 transition hover:shadow-elegant">
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-secondary text-primary"><b.icon /></span>
-              <h3 className="mt-4 text-xl font-semibold">{b.title}</h3>
-              <p className="mt-2 text-muted-foreground">{b.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-    </>
-  );
-}
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { ArrowRight, ArrowUpRight, Camera, ScanLine, Recycle, Leaf, Sparkles, ShieldCheck, BookOpen, Check, Upload, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useApp } from '@/components/app-context';
+import { pageHead } from '@/lib/page-head';
+import bali from '@/assets/bali-landscape.jpg';
+export const Route=createFileRoute('/')({head:()=>pageHead('Kenali Sampahmu, Jaga Bali','Identifikasi sampah dengan AI, pelajari pemilahan, dan mulai kebiasaan baik untuk Bali.'),component:Home});
+function Home(){const {t}=useApp();return <><section className="relative isolate overflow-hidden bg-forest text-forest-foreground"><img src={bali} alt={t('Sawah dan pura di Bali','Rice terraces and temple in Bali')} width={1920} height={1024} className="absolute inset-0 -z-20 h-full w-full object-cover object-center"/><div className="hero-shade absolute inset-0 -z-10"/><div className="page-wrap grid items-center gap-10 py-12 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16 lg:py-16"><div className="fade-up"><span className="inline-flex items-center gap-2 rounded-full border border-forest-foreground/25 bg-forest/30 px-3 py-2 text-xs font-medium"><Sparkles className="h-3.5 w-3.5 text-sun"/>{t('Teknologi cerdas. Kepedulian nyata.','Smart technology. Real care.')}</span><p className="mt-7 text-sm font-semibold text-sun">PilahBali — {t('Kenali Sampahmu, Jaga Bali.','Know Your Waste, Protect Bali.')}</p><h1 className="mt-3 max-w-2xl text-4xl font-extrabold leading-[1.16] md:text-5xl lg:text-6xl">{t('Sampahmu,','Your waste,')}<br/>{t('tanggung jawabmu.','your responsibility.')}<br/><span className="text-leaf">{t('Bali, masa depan kita.','Bali, our shared future.')}</span></h1><p className="mt-6 max-w-lg text-base leading-relaxed text-forest-foreground/80">{t('Dari satu foto, jadi langkah nyata. Kenali sampah dengan AI dan temukan cara memilah yang tepat untuk menjaga Bali tetap lestari.','Turn one photo into meaningful action. Identify waste with AI and discover the right way to sort it for a more sustainable Bali.')}</p><div className="mt-8 flex flex-wrap gap-3"><Button asChild className="h-auto min-h-12 whitespace-normal rounded-lg bg-sun px-5 py-3 text-sun-foreground hover:bg-sun/90"><Link to="/scanner"><ScanLine/>{t('Mulai Identifikasi Sampah','Start Identifying Waste')}<ArrowUpRight/></Link></Button><Button asChild variant="outline" className="h-auto min-h-12 whitespace-normal rounded-lg border-forest-foreground/30 bg-transparent px-5 py-3 text-forest-foreground hover:bg-forest-foreground/10 hover:text-forest-foreground"><Link to="/panduan">{t('Pelajari Cara Memilah','Learn How to Sort')}<ArrowRight/></Link></Button></div><div className="mt-7 flex flex-wrap gap-5 text-xs text-forest-foreground/75"><span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-leaf"/>{t('Didukung Google Gemini','Powered by Google Gemini')}</span><span className="flex items-center gap-1.5"><Leaf className="h-4 w-4 text-leaf"/>{t('Dibuat untuk Bali','Made for Bali')}</span></div></div><div className="relative mx-auto w-full max-w-[310px] py-2"><div className="relative rounded-[32px] border-[7px] border-forest bg-background p-4 text-foreground shadow-elegant"><div className="mx-auto mb-4 h-1.5 w-16 rounded-full bg-border"/><div className="flex items-center justify-between text-xs font-bold"><span>Pilah<span className="text-primary">Bali.</span></span><ScanLine className="h-4 w-4 text-primary"/></div><div className="relative mt-4 grid h-44 place-items-center overflow-hidden rounded-lg bg-secondary"><svg viewBox="0 0 100 150" className="h-36 w-24 text-primary" aria-label={t('Ilustrasi botol plastik','Plastic bottle illustration')}><path d="M38 8h24v18l8 14 6 12v78q0 12-12 12H36q-12 0-12-12V52l6-12 8-14z" fill="currentColor" opacity=".16" stroke="currentColor" strokeWidth="2"/><path d="M36 8h28v12H36zM25 63h50v42H25z" fill="currentColor"/><path d="M42 76h16l-8 15z" fill="var(--primary-foreground)"/></svg><div className="absolute inset-x-4 top-20 h-px bg-primary/50"/><span className="absolute bottom-3 left-3 rounded-md bg-card px-2 py-1 text-[10px] font-medium">{t('Pratinjau ilustrasi · bukan hasil AI','Illustrative preview · not an AI result')}</span></div><div className="mt-4 flex items-center gap-2 text-[10px] font-bold uppercase text-primary"><Check className="h-3 w-3"/>{t('Contoh tampilan laporan','Example report layout')}</div><h2 className="mt-2 text-lg font-bold">{t('Botol plastik','Plastic bottle')}</h2><div className="mt-2 flex gap-2"><span className="rounded-md bg-secondary px-2 py-1 text-xs text-primary">{t('Plastik','Plastic')}</span><span className="rounded-md bg-muted px-2 py-1 text-xs">{t('Material terlihat','Visible material')}</span></div><div className="mt-4 border-t border-border pt-3"><p className="text-xs font-semibold">{t('Langkah berikutnya','Next steps')}</p><p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t('Periksa sisa isi · Bilas · Pilah terpisah','Check residue · Rinse · Sort separately')}</p></div></div><div className="absolute -right-3 top-12 flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-3 text-foreground shadow-elegant"><span className="grid h-8 w-8 place-items-center rounded-lg bg-secondary text-primary"><Recycle className="h-4 w-4"/></span><div><p className="text-xs font-bold">{t('5 kategori utama','5 core categories')}</p><p className="text-[10px] text-muted-foreground">{t('+ panduan residu','+ residual waste guide')}</p></div></div></div></div><div className="bali-rule"/></section><section className="border-b border-border"><div className="page-wrap grid grid-cols-3 gap-3 py-7 md:py-8">{[{icon:Recycle,num:'5 + 1',id:'Kategori & residu',en:'Categories & residuals'},{icon:Sparkles,num:'AI',id:'Identifikasi berbasis foto',en:'Photo-based identification'},{icon:BookOpen,num:t('Aksi nyata','Real action'),id:'Panduan pengelolaan',en:'Disposal guidance'}].map(s=><div key={s.id} className="flex flex-col items-center gap-2 text-center sm:flex-row sm:justify-center sm:text-left"><s.icon className="h-6 w-6 text-primary"/><div><p className="text-lg font-bold md:text-xl">{s.num}</p><p className="mt-1 text-xs text-muted-foreground md:text-sm">{t(s.id,s.en)}</p></div></div>)}</div></section><section className="page-wrap py-16 md:py-20"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-widest text-primary">{t('Cara kerja','How it works')}</p><h2 className="mt-3 text-3xl font-bold">{t('Tiga langkah. Satu perubahan baik.','Three steps. One positive change.')}</h2></div><Link to="/scanner" className="flex items-center gap-2 text-sm font-semibold text-primary">{t('Coba sekarang','Try it now')}<ArrowUpRight className="h-4 w-4"/></Link></div><div className="mt-9 grid gap-5 md:grid-cols-3">{[{icon:Upload,title:t('Foto sampahmu','Photograph your waste'),desc:t('Ambil foto atau unggah gambar dengan objek yang terlihat jelas.','Take or upload a photo with a clearly visible object.')},{icon:ScanLine,title:t('Kenali dengan AI','Identify with AI'),desc:t('Gemini mengenali objek dan material, tanpa memaksakan kategori.','Gemini identifies objects and materials without forcing a category.')},{icon:Recycle,title:t('Pilah, lalu kelola','Sort, then take action'),desc:t('Ikuti saran yang sesuai dan periksa kondisi benda secara langsung.','Follow suitable guidance and inspect the item in person.')}].map((s,i)=><article key={i} className="eco-panel p-6 transition hover:-translate-y-1"><div className="flex items-center justify-between"><span className="grid h-11 w-11 place-items-center rounded-lg bg-secondary text-primary"><s.icon className="h-5 w-5"/></span><span className="font-display text-3xl font-bold text-border">0{i+1}</span></div><h3 className="mt-5 text-lg font-bold">{s.title}</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.desc}</p></article>)}</div></section><section className="bg-secondary/50"><div className="page-wrap grid items-center gap-10 py-14 md:grid-cols-2"><div className="relative"><img src={bali} width={1920} height={1024} loading="lazy" className="aspect-[4/3] w-full rounded-xl object-cover" alt={t('Alam Bali yang perlu kita jaga','Bali’s natural environment')}/><div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-lg bg-card px-4 py-3 text-sm font-semibold"><MapPin className="h-4 w-4 text-primary"/>{t('Bali bukan sekadar destinasi.','Bali is more than a destination.')}</div></div><div><p className="text-xs font-semibold uppercase tracking-widest text-primary">{t('Kenapa Bali butuh ini','Why Bali needs this')}</p><h2 className="mt-3 text-3xl font-bold">{t('Pulau yang indah. Tanggung jawab bersama.','A beautiful island. A shared responsibility.')}</h2><p className="mt-5 leading-relaxed text-muted-foreground">{t('Pantai, sawah, dan budaya Bali adalah warisan kita. Sampah yang tercampur membuat pengelolaan lebih sulit. Perubahan dimulai dari rumah, sekolah, dan kebiasaan kita setiap hari.','Bali’s beaches, rice fields and culture are our shared heritage. Mixed waste makes disposal harder. Change starts in our homes, schools and daily habits.')}</p><div className="mt-6 space-y-3">{[t('Kurangi sampah yang tercampur','Reduce mixed waste'),t('Jaga material yang masih bernilai','Preserve reusable materials'),t('Bangun kebiasaan yang berkelanjutan','Build sustainable habits')].map(x=><p key={x} className="flex items-center gap-3 text-sm"><Check className="h-4 w-4 text-primary"/>{x}</p>)}</div><Button asChild variant="link" className="mt-5 px-0"><Link to="/tentang">{t('Tentang gerakan PilahBali','About PilahBali')}<ArrowRight/></Link></Button></div></div></section><section className="bg-forest text-forest-foreground"><div className="page-wrap flex flex-col items-start justify-between gap-7 py-12 md:flex-row md:items-center"><div className="max-w-xl"><span className="text-xs font-semibold text-sun">{t('MULAI DARI SATU BENDA','START WITH ONE ITEM')}</span><h2 className="mt-3 text-3xl font-bold">{t('Langkah kecilmu berarti untuk Bali.','Your small steps matter for Bali.')}</h2><p className="mt-3 text-sm text-forest-foreground/75">{t('Satu foto. Satu keputusan lebih baik.','One photo. One better decision.')}</p></div><Button asChild className="h-12 bg-sun text-sun-foreground hover:bg-sun/90"><Link to="/scanner"><Camera/>{t('Mulai Identifikasi Sampah','Start Identifying Waste')}<ArrowUpRight/></Link></Button></div></section></>;}
