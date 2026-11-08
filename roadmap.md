@@ -1,4 +1,10 @@
 # Roadmap
+- [ ] Redesign all pages with Modern Eco-Tech, responsive navigation, dark mode and ID/EN
+- [ ] Scanner camera, scanning states and real model confidence report
+- [ ] EcoZone local history, points, impact dashboard, quiz and weekly challenge
+- [ ] Gemini Eco Assistant
+- [ ] Locations directory and Google map (connection unavailable: workspace permission)
+- [ ] Verify rules, real scanner flow and responsive layouts
 - [ ] General object recognition, materials and WASTE/NON_WASTE/UNKNOWN without redesign
 - [ ] Verify nine requested object cases and scanner flow; report actual test coverage
 - [x] Debug & fix Gemini image analysis (secret, server call, inline image, model, logs)
