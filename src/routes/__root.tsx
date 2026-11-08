@@ -40,6 +40,15 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
+    const msg = String((error as Error | undefined)?.message ?? "");
+    if (/Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module/i.test(msg)) {
+      const last = Number(sessionStorage.getItem("chunk-reload-at") || 0);
+      if (Date.now() - last > 10000) {
+        sessionStorage.setItem("chunk-reload-at", String(Date.now()));
+        window.location.reload();
+        return;
+      }
+    }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
@@ -118,6 +127,31 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  // Recover from stale chunks after a new deploy: reload once instead of a blank screen.
+  useEffect(() => {
+    const KEY = "chunk-reload-at";
+    const recover = (event?: Event) => {
+      const last = Number(sessionStorage.getItem(KEY) || 0);
+      if (Date.now() - last < 10000) return;
+      event?.preventDefault();
+      sessionStorage.setItem(KEY, String(Date.now()));
+      window.location.reload();
+    };
+    const onPreload = (e: Event) => recover(e);
+    const onRejection = (e: PromiseRejectionEvent) => {
+      const msg = String((e.reason as Error)?.message ?? e.reason ?? "");
+      if (/Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module/i.test(msg)) {
+        recover(e);
+      }
+    };
+    window.addEventListener("vite:preloadError", onPreload);
+    window.addEventListener("unhandledrejection", onRejection);
+    return () => {
+      window.removeEventListener("vite:preloadError", onPreload);
+      window.removeEventListener("unhandledrejection", onRejection);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
