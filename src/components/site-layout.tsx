@@ -1,95 +1,11 @@
-import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import logoAsset from "../assets/pilahbali-logo.png.asset.json";
-
-const nav = [
-  { to: "/", label: "Beranda" },
-  { to: "/scanner", label: "Scanner" },
-  { to: "/hasil", label: "Hasil" },
-  { to: "/panduan", label: "Panduan Sampah" },
-  { to: "/tentang", label: "Tentang Kami" },
-] as const;
-
-export function Logo() {
-  return (
-    <Link to="/" className="flex items-center gap-2">
-      <img
-        src={logoAsset.url}
-        alt="Logo PilahBali"
-        className="h-10 w-10 rounded-xl object-contain"
-        width={40}
-        height={40}
-      />
-      <span className="font-display text-lg font-bold tracking-tight">
-        Pilah<span className="text-primary">Bali</span>
-      </span>
-    </Link>
-  );
-}
-
-export function SiteHeader() {
-  const [open, setOpen] = useState(false);
-  return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Logo />
-        <nav className="hidden items-center gap-1 md:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              activeOptions={{ exact: true }}
-              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground"
-              activeProps={{ className: "bg-secondary text-secondary-foreground" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
-        <button className="md:hidden" aria-label="Menu" onClick={() => setOpen(!open)}>
-          {open ? <X /> : <Menu />}
-        </button>
-      </div>
-      {open && (
-        <nav className="flex flex-col border-t border-border px-4 py-2 md:hidden">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              onClick={() => setOpen(false)}
-              activeOptions={{ exact: true }}
-              className="rounded-lg px-3 py-3 text-sm font-medium text-muted-foreground"
-              activeProps={{ className: "bg-secondary text-secondary-foreground" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
-      )}
-    </header>
-  );
-}
-
-export function SiteFooter() {
-  return (
-    <footer className="border-t border-border bg-secondary/50">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-muted-foreground md:flex-row">
-        <Logo />
-        <p>Kenali Sampahmu, Jaga Bali. · © 2026 PilahBali</p>
-      </div>
-    </footer>
-  );
-}
-
-export function PageHeader({ eyebrow, title, desc }: { eyebrow: string; title: string; desc: string }) {
-  return (
-    <section className="bg-hero border-b border-border">
-      <div className="mx-auto max-w-6xl px-4 py-14 md:py-20">
-        <span className="inline-block rounded-full bg-sun px-3 py-1 text-xs font-semibold text-sun-foreground">{eyebrow}</span>
-        <h1 className="mt-4 max-w-3xl text-3xl font-bold md:text-5xl">{title}</h1>
-        <p className="mt-4 max-w-2xl text-muted-foreground md:text-lg">{desc}</p>
-      </div>
-    </section>
-  );
-}
+import { Link } from '@tanstack/react-router';
+import { Menu, X, Moon, Sun, Sprout, ArrowUpRight, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import logoAsset from '../assets/pilahbali-logo.png.asset.json';
+import { Button } from './ui/button';
+import { useApp } from './app-context';
+const nav=[{to:'/',id:'Beranda',en:'Home'},{to:'/scanner',id:'AI Scanner',en:'AI Scanner'},{to:'/panduan',id:'Panduan Sampah',en:'Waste Guide'},{to:'/ecozone',id:'EcoZone',en:'EcoZone'},{to:'/lokasi',id:'Lokasi',en:'Locations'},{to:'/tentang',id:'Tentang Kami',en:'About Us'}] as const;
+export function Logo(){return <Link to="/" className="flex shrink-0 items-center gap-2"><img src={logoAsset.url} alt="PilahBali" width={42} height={42} className="h-11 w-11 object-contain"/><span className="font-display text-xl font-extrabold">Pilah<span className="text-primary">Bali</span><span className="text-primary">.</span></span></Link>;}
+export function SiteHeader(){const [open,setOpen]=useState(false);const {t,lang,setLang,dark,toggleDark,points}=useApp();return <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-xl"><div className="page-wrap flex h-20 items-center justify-between gap-3"><Logo/><nav aria-label="Main navigation" className="hidden items-center gap-1 xl:flex">{nav.map(n=><Link key={n.to} to={n.to} activeOptions={{exact:true}} className="rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:text-primary" activeProps={{className:'bg-secondary text-primary'}}>{t(n.id,n.en)}</Link>)}</nav><div className="flex items-center gap-1"><Link to="/ecozone" className="mr-2 hidden items-center gap-1 text-xs font-semibold text-primary sm:flex"><Sprout className="h-4 w-4"/>{points} pts</Link><select aria-label={t('Bahasa','Language')} value={lang} onChange={e=>setLang(e.target.value==='en'?'en':'id')} className="h-9 w-16 rounded-md border-none bg-transparent text-xs font-semibold"><option value="id">🇮🇩 ID</option><option value="en">🇬🇧 EN</option></select><Button size="icon" variant="ghost" title={t('Ganti tema','Toggle theme')} aria-label={t('Ganti tema','Toggle theme')} onClick={toggleDark}>{dark?<Sun/>:<Moon/>}</Button><Button className="xl:hidden" size="icon" variant="ghost" aria-label={t('Buka menu','Open menu')} aria-expanded={open} onClick={()=>setOpen(v=>!v)}>{open?<X/>:<Menu/>}</Button></div></div>{open&&<nav className="page-wrap grid gap-1 border-t border-border py-3 xl:hidden">{nav.map(n=><Link key={n.to} to={n.to} onClick={()=>setOpen(false)} className="rounded-md px-3 py-3 text-sm hover:bg-secondary" activeOptions={{exact:true}} activeProps={{className:'bg-secondary font-semibold text-primary'}}>{t(n.id,n.en)}</Link>)}<Link to="/ecozone" className="px-3 py-3 text-sm text-primary">🌱 {points} EcoPoints</Link></nav>}</header>;}
+export function SiteFooter(){const {t}=useApp();return <footer className="border-t border-border bg-secondary/40"><div className="page-wrap grid gap-8 py-12 md:grid-cols-[1.1fr_1fr_1fr]"><div><Logo/><p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">{t('Kenali Sampahmu, Jaga Bali.','Know Your Waste, Protect Bali.')}<br/>{t('Langkah kecil hari ini. Bali yang lebih lestari esok hari.','Small steps today. A more sustainable Bali tomorrow.')}</p></div><div><h3 className="mb-4 text-sm font-bold">{t('Jelajahi PilahBali','Explore PilahBali')}</h3><div className="grid grid-cols-2 gap-3">{nav.slice(1).map(n=><Link key={n.to} to={n.to} className="text-sm text-muted-foreground hover:text-primary">{t(n.id,n.en)}</Link>)}<Link to="/hasil" className="text-sm text-muted-foreground">{t('Hasil Analisis','Analysis Results')}</Link></div></div><div className="rounded-lg border border-border p-4"><h3 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4 text-primary"/>{t('Transparansi AI','AI Transparency')}</h3><p className="mt-2 text-xs leading-relaxed text-muted-foreground">{t('Gemini mengenali objek dari foto dan memberi saran pemilahan. Hasil dan estimasi keyakinan dapat keliru; periksa kondisi langsung. Kami tidak mengarang lokasi pengelolaan.','Gemini recognizes photographed objects and suggests sorting actions. Results and confidence estimates can be wrong; inspect items directly. We do not invent disposal locations.')}</p></div></div><div className="page-wrap flex flex-wrap justify-between gap-2 border-t border-border py-5 text-xs text-muted-foreground"><span>© 2026 PilahBali. {t('Untuk Bali yang kita cintai.','For the Bali we love.')}</span><span className="flex items-center gap-1">Made with care, for Bali <ArrowUpRight className="h-3 w-3"/></span></div></footer>;}
+export function PageHeader({eyebrow,title,desc}:{eyebrow:string;title:string;desc:string}){return <section className="border-b border-border bg-secondary/40"><div className="page-wrap py-12 md:py-16"><span className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary"><span className="h-1.5 w-1.5 rounded-full bg-primary"/>{eyebrow}</span><h1 className="max-w-3xl text-3xl font-bold leading-tight md:text-4xl">{title}</h1><p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{desc}</p></div></section>;}
