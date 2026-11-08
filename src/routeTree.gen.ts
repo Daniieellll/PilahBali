@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EcozoneRouteImport } from './routes/ecozone'
 import { Route as HasilRouteImport } from './routes/hasil'
+import { Route as LokasiRouteImport } from './routes/lokasi'
 import { Route as PanduanRouteImport } from './routes/panduan'
 import { Route as ScannerRouteImport } from './routes/scanner'
 import { Route as TentangRouteImport } from './routes/tentang'
@@ -20,9 +22,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EcozoneRoute = EcozoneRouteImport.update({
+  id: '/ecozone',
+  path: '/ecozone',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HasilRoute = HasilRouteImport.update({
   id: '/hasil',
   path: '/hasil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LokasiRoute = LokasiRouteImport.update({
+  id: '/lokasi',
+  path: '/lokasi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PanduanRoute = PanduanRouteImport.update({
@@ -43,14 +55,18 @@ const TentangRoute = TentangRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ecozone': typeof EcozoneRoute
   '/hasil': typeof HasilRoute
+  '/lokasi': typeof LokasiRoute
   '/panduan': typeof PanduanRoute
   '/scanner': typeof ScannerRoute
   '/tentang': typeof TentangRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ecozone': typeof EcozoneRoute
   '/hasil': typeof HasilRoute
+  '/lokasi': typeof LokasiRoute
   '/panduan': typeof PanduanRoute
   '/scanner': typeof ScannerRoute
   '/tentang': typeof TentangRoute
@@ -58,22 +74,48 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ecozone': typeof EcozoneRoute
   '/hasil': typeof HasilRoute
+  '/lokasi': typeof LokasiRoute
   '/panduan': typeof PanduanRoute
   '/scanner': typeof ScannerRoute
   '/tentang': typeof TentangRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hasil' | '/panduan' | '/scanner' | '/tentang'
+  fullPaths:
+    | '/'
+    | '/ecozone'
+    | '/hasil'
+    | '/lokasi'
+    | '/panduan'
+    | '/scanner'
+    | '/tentang'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hasil' | '/panduan' | '/scanner' | '/tentang'
-  id: '__root__' | '/' | '/hasil' | '/panduan' | '/scanner' | '/tentang'
+  to:
+    | '/'
+    | '/ecozone'
+    | '/hasil'
+    | '/lokasi'
+    | '/panduan'
+    | '/scanner'
+    | '/tentang'
+  id:
+    | '__root__'
+    | '/'
+    | '/ecozone'
+    | '/hasil'
+    | '/lokasi'
+    | '/panduan'
+    | '/scanner'
+    | '/tentang'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EcozoneRoute: typeof EcozoneRoute
   HasilRoute: typeof HasilRoute
+  LokasiRoute: typeof LokasiRoute
   PanduanRoute: typeof PanduanRoute
   ScannerRoute: typeof ScannerRoute
   TentangRoute: typeof TentangRoute
@@ -88,11 +130,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ecozone': {
+      id: '/ecozone'
+      path: '/ecozone'
+      fullPath: '/ecozone'
+      preLoaderRoute: typeof EcozoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hasil': {
       id: '/hasil'
       path: '/hasil'
       fullPath: '/hasil'
       preLoaderRoute: typeof HasilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lokasi': {
+      id: '/lokasi'
+      path: '/lokasi'
+      fullPath: '/lokasi'
+      preLoaderRoute: typeof LokasiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/panduan': {
@@ -121,7 +177,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EcozoneRoute: EcozoneRoute,
   HasilRoute: HasilRoute,
+  LokasiRoute: LokasiRoute,
   PanduanRoute: PanduanRoute,
   ScannerRoute: ScannerRoute,
   TentangRoute: TentangRoute,
