@@ -1,24 +1,95 @@
-# PilahBali
+# 🌱 PilahBali
+### Kenali Sampahmu, Jaga Bali.
 
-Buat website bernama PilahBali dengan tagline 'Scan Smart, Sort Right, Save Bali'. Website ini adalah platform edukasi pemilahan sampah berbasis AI untuk masyarakat Bali. Buat desain modern, profesional, ramah lingkungan, dengan warna hijau, putih, dan sedikit aksen kuning. Gunakan Bahasa Indonesia untuk seluruh tampilan. Buat halaman: 1) Beranda dengan logo, navigasi, headline, penjelasan manfaat dan tombol Mulai Scan Sampah. 2) Scanner dengan area unggah foto dari laptop, tombol Analisis Sampah, dan pratinjau gambar. 3) Hasil dengan tampilan nama benda, kategori sampah, dan petunjuk pemilahan. 4) Panduan Sampah untuk organik, plastik, kertas, kaca, dan logam. 5) Tentang Kami yang menjelaskan tujuan membantu mengurangi masalah sampah di Bali. Pastikan responsif untuk laptop dan HP, navigasi berfungsi, dan desain terlihat seperti produk teknologi sungguhan. Untuk tahap ini buat tampilan dan interaksi dasar saja. Jangan membuat hasil AI palsu atau mengaku sudah terhubung ke Gemini. Jangan menghubungkan API, database, atau layanan berbayar dulu.
+**PilahBali** adalah website berbasis kecerdasan buatan (Artificial Intelligence/AI) yang dikembangkan untuk membantu masyarakat mengenali jenis sampah dan memahami cara memilah serta mengelolanya dengan lebih tepat.
 
-This project was built with [Lovable](https://lovable.dev).
+Melalui teknologi AI berbasis analisis gambar, pengguna dapat mengunggah foto sampah untuk mendapatkan hasil identifikasi dan panduan pemilahan. PilahBali hadir sebagai salah satu solusi digital untuk meningkatkan kesadaran masyarakat terhadap pengelolaan sampah dan menjaga kelestarian lingkungan Bali.
 
-## Build with Lovable
+---
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/517f4884-d3ea-44f1-a7fa-2a27b623b029).
+## 🎯 Tujuan Proyek
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+PilahBali dikembangkan dengan tujuan:
 
-## Development
+- Membantu masyarakat mengenali berbagai jenis sampah.
+- Memberikan informasi mengenai kategori dan cara pemilahan sampah.
+- Meningkatkan kesadaran masyarakat tentang pentingnya pengelolaan sampah.
+- Memanfaatkan teknologi AI untuk mendukung edukasi lingkungan.
+- Mendukung terciptanya lingkungan Bali yang lebih bersih dan berkelanjutan.
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## ✨ Fitur Utama
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+### 1. AI Scanner
+Fitur utama PilahBali yang memungkinkan pengguna mengunggah foto sampah untuk dianalisis menggunakan AI.
+
+Hasil analisis dirancang untuk memberikan informasi mengenai:
+- Identifikasi jenis sampah.
+- Kategori sampah.
+- Panduan pemilahan.
+- Rekomendasi penanganan sampah.
+
+### 2. Panduan Sampah
+Menyediakan informasi edukatif mengenai jenis-jenis sampah dan cara memilahnya dengan benar.
+
+### 3. EcoZone
+Bagian edukasi lingkungan yang mendukung peningkatan pengetahuan dan kesadaran pengguna mengenai pengelolaan sampah.
+
+### 4. Informasi Lokasi
+Menyediakan bagian informasi lokasi yang berkaitan dengan pengelolaan sampah di Bali.
+
+### 5. Tentang Kami
+Menjelaskan identitas, tujuan, dan latar belakang pengembangan PilahBali.
+
+### 6. Responsive Website
+Dirancang agar dapat diakses melalui berbagai perangkat, termasuk komputer, laptop, tablet, dan smartphone.
+
+## ⚙️ Teknologi yang Digunakan
+
+| Teknologi | Kegunaan |
+|---|---|
+| Lovable | Platform AI-assisted development untuk membangun website dan antarmuka aplikasi. |
+| Google Gemini API | Menghubungkan website dengan kemampuan AI untuk menganalisis gambar sampah. |
+| Gemini Vision | Kemampuan analisis visual untuk membantu mengenali objek dari foto. |
+| GitHub | Menyimpan, mengelola, dan mendokumentasikan source code proyek. |
+
+## 🔄 Alur Kerja AI Scanner
+
+1. Pengguna membuka fitur AI Scanner.
+2. Pengguna mengunggah foto sampah.
+3. Website mengirimkan gambar untuk dianalisis melalui integrasi Google Gemini API.
+4. Model AI menganalisis objek pada gambar.
+5. Hasil identifikasi diterima dan ditampilkan oleh website.
+6. Pengguna memperoleh informasi kategori serta panduan pemilahan berdasarkan hasil analisis.
+
+## 🌍 Manfaat PilahBali
+
+PilahBali diharapkan dapat memberikan manfaat dalam beberapa aspek:
+
+- **Lingkungan:** Mendukung kebiasaan memilah sampah dengan lebih baik.
+- **Pendidikan:** Menjadi media edukasi digital mengenai jenis dan pengelolaan sampah.
+- **Teknologi:** Memanfaatkan kecerdasan buatan untuk membantu menyelesaikan permasalahan lingkungan.
+- **Masyarakat:** Mempermudah akses informasi mengenai pemilahan sampah.
+
+## 🚀 Akses Proyek
+
+- **Website:** [https://lovable.dev/projects/517f4884-d3ea-44f1-a7fa-2a27b623b029?magic_link=mc_883312bf-ad45-4193-b935-079e8ec24246]
+- **GitHub Repository:** https://github.com/Daniieellll/pilahbali
+
+## 👥 Tim Pengembang
+
+**PilahBali – Kenali Sampahmu, Jaga Bali.**
+
+Dikembangkan sebagai proyek inovasi teknologi berbasis AI untuk mendukung edukasi dan pengelolaan sampah di Bali.
+
+Nama anggota tim:
+1. [Daniel Chris Manuel]
+2. [I Putu Aditya Adelio Wistara]
+3. [Putu Dimas Yuda Putra]
+
+## 📌 Status Pengembangan
+
+PilahBali merupakan proyek yang terus dikembangkan. Pengembangan difokuskan pada peningkatan kemampuan identifikasi sampah, penyempurnaan panduan pemilahan, serta peningkatan pengalaman pengguna.
+
+---
+
+**PilahBali — Small Actions, Cleaner Bali. 🌱**
