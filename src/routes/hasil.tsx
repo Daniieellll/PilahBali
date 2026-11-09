@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, HelpCircle, ListChecks, Loader2, Tag } from "lucide-react";
+import { AlertTriangle, CheckCircle2, HelpCircle, ListChecks, Loader2, Tag } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/components/site-layout";
+import { ScanFrame } from "@/components/scan-frame";
 import { Button } from "@/components/ui/button";
 import { analyzeWaste, type AnalysisResult } from "@/lib/analyze.functions";
 import { categories } from "@/lib/waste-guide";
@@ -69,34 +70,35 @@ function Hasil() {
       <PageHeader eyebrow="Hasil" title="Hasil analisis sampah" desc="Nama benda, material, status, dan saran pengelolaan dari AI." />
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="grid gap-6 md:grid-cols-[1fr_1.2fr]">
-          <div className="grid min-h-72 self-start place-items-center overflow-hidden rounded-3xl border border-border bg-muted">
-            {img ? <img src={img} alt="Foto yang diunggah" className="max-h-96 w-full object-contain" /> : (
+          <div className="min-w-0 self-start">
+            {img ? <ScanFrame image={img} loading={loading} /> : (
               <div className="p-6 text-center text-sm text-muted-foreground">
                 Belum ada foto. <Link to="/scanner" className="font-semibold text-primary underline">Unggah di Scanner</Link>
               </div>
             )}
           </div>
-          <div className="grid content-start gap-4">
+          <div className="grid min-w-0 content-start gap-4" aria-busy={loading}>
             {loading && (
               <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-6">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                <Loader2 aria-hidden="true" className="h-6 w-6 shrink-0 animate-spin text-primary motion-reduce:animate-none" />
                 <div><p className="font-display font-semibold">PilahBali Smart Action sedang menganalisis…</p><p className="text-sm text-muted-foreground">Mengenali objek, memeriksa kondisi, dan menyiapkan panduan.</p></div>
               </div>
             )}
             {result && !result.ok && (
-              <div className="flex gap-3 rounded-2xl border border-destructive/40 bg-destructive/10 p-5 text-sm">
+              <div role="alert" className="scan-result-reveal flex flex-wrap gap-3 rounded-2xl border border-destructive/40 bg-destructive/10 p-5 text-sm">
                 <AlertTriangle className="h-5 w-5 shrink-0 text-destructive" />
                 <div className="flex-1"><p className="font-semibold">Analisis gagal</p><p className="text-muted-foreground">{result.error}</p></div>
                 {img && <Button variant="link" onClick={() => run(img)}>Coba lagi</Button>}
               </div>
             )}
             {result?.ok && !result.recognized && (
-              <div role="status" className="flex gap-3 rounded-2xl border border-sun bg-sun/20 p-5 text-sm text-sun-foreground">
+              <div role="status" className="scan-result-reveal flex gap-3 rounded-2xl border border-sun bg-sun/20 p-5 text-sm text-sun-foreground">
                 <HelpCircle className="h-5 w-5 shrink-0" /><p>{result.message}</p>
               </div>
             )}
             {result?.ok && result.recognized && (
-              <>
+              <div className="scan-result-reveal grid min-w-0 gap-4">
+                <p role="status" className="flex items-center gap-2 text-sm font-semibold text-primary"><CheckCircle2 aria-hidden="true" className="h-5 w-5 shrink-0" />Analisis selesai</p>
                 {result.mixed && <h2 className="text-xl font-semibold">Beberapa objek teridentifikasi</h2>}
                 {result.objects.map((object, index) => {
                   const cat = object.status === "WASTE" ? categories.find((c) => c.key === object.category?.toLowerCase()) : undefined;
@@ -136,7 +138,7 @@ function Hasil() {
                    {result.unclassified.length > 0 && <p className="mt-2">Objek belum dapat dikenali dengan yakin: {result.unclassified.join(", ")}. Unggah foto lebih jelas.</p>}
                 </div>}
                 <p className="text-xs text-muted-foreground">Hasil dari AI bisa keliru. Cek kembali dengan <Link to="/panduan" className="underline">Panduan Sampah</Link>.</p>
-              </>
+              </div>
             )}
             {!img && <Field icon={ListChecks} label="Belum ada analisis"><p className="text-muted-foreground">Unggah foto di Scanner untuk memulai.</p></Field>}
             <Button asChild className="h-auto whitespace-normal rounded-full bg-brand px-6 py-3 font-semibold shadow-elegant"><Link to="/scanner">{result?.ok && !result.recognized ? "Unggah Foto Lain" : "Scan Sampah Lain"}</Link></Button>

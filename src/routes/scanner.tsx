@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ImageUp, ScanLine, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { PageHeader } from "@/components/site-layout";
+import { ScanFrame } from "@/components/scan-frame";
 
 export const Route = createFileRoute("/scanner")({
   head: () => ({
@@ -67,8 +68,8 @@ function Scanner() {
         </div>
         <div className="flex flex-col rounded-3xl border border-border bg-card p-6">
           <h2 className="text-xl font-semibold">Pratinjau Gambar</h2>
-          <div className="mt-4 grid flex-1 min-h-64 place-items-center overflow-hidden rounded-2xl bg-muted">
-            {preview ? <img src={preview} alt="Pratinjau sampah" className="max-h-80 w-full object-contain" /> : <p className="text-sm text-muted-foreground">Belum ada gambar dipilih</p>}
+          <div className="mt-4 flex-1">
+            {preview ? <ScanFrame image={preview} /> : <div className="grid min-h-64 place-items-center rounded-2xl bg-muted"><p className="text-sm text-muted-foreground">Belum ada gambar dipilih</p></div>}
           </div>
           {preview && (
             <div className="mt-3 flex items-center justify-between text-sm text-muted-foreground">

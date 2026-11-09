@@ -12,3 +12,4 @@
 - Validate structured AI responses through the shared analysis-result module with independent identity, status, material and category confidence; why: recognized everyday objects remain visible while uncertain classifications are withheld and categories stay extensible.
 - Shared language, theme and local activity state live in AppProvider; why: pages and navigation use a consistent SSR-safe initial state.
 - Eco Assistant uses a separate Gemini server function with the existing secret and fallback models; why: chat does not alter the image-analysis pipeline.
+- Scanner upload previews and analysis photos share ScanFrame, with motion driven solely by the results page's pending request state; why: animation stays consistent without altering Gemini logic or simulating results.
