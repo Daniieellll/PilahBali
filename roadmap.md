@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Add state-driven scanner frame and accessible result transitions; verify real Gemini flow
 - [ ] Redesign all pages with Modern Eco-Tech, responsive navigation, dark mode and ID/EN
 - [ ] Scanner camera, scanning states and real model confidence report
 - [ ] EcoZone local history, points, impact dashboard, quiz and weekly challenge
