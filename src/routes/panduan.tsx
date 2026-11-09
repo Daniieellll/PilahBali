@@ -23,7 +23,7 @@ function Panduan() {
       <PageHeader eyebrow="Panduan" title="Panduan memilah sampah" desc="Kenali lima kategori utama sampah dan cara menanganinya sebelum dibuang atau didaur ulang." />
       <section className="mx-auto grid max-w-6xl gap-6 px-4 py-12 md:grid-cols-2 lg:grid-cols-3">
         {categories.map((c) => (
-          <article key={c.key} className="rounded-3xl border border-border bg-card p-6 transition hover:shadow-elegant">
+          <article key={c.key} className="rounded-3xl border border-border bg-card p-6">
             <div className={`grid h-14 w-14 place-items-center rounded-2xl text-3xl ${c.color}`}>{c.emoji}</div>
             <h2 className="mt-4 text-2xl font-bold">{c.name}</h2>
             <p className="mt-1 text-sm text-muted-foreground">Contoh: {c.examples}</p>

@@ -13,3 +13,4 @@
 - Shared language, theme and local activity state live in AppProvider; why: pages and navigation use a consistent SSR-safe initial state.
 - Eco Assistant uses a separate Gemini server function with the existing secret and fallback models; why: chat does not alter the image-analysis pipeline.
 - Scanner upload previews and analysis photos share ScanFrame, with motion driven solely by the results page's pending request state; why: animation stays consistent without altering Gemini logic or simulating results.
+- Shared interaction CSS and Button classes own hover feedback, with fine-pointer and reduced-motion gates; why: consistent lightweight effects need no JavaScript or layout-changing animation.

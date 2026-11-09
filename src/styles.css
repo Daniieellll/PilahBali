@@ -198,3 +198,46 @@ h1,h2,h3 { text-wrap: balance; }
 @keyframes scan-pulse { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
 @keyframes scan-reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .scan-beam, .scan-beam::after, .scan-ai-icon, .scan-dots, .scan-result-reveal { animation: none; } .scan-beam::after { top: 50%; } }
+
+/* Shared CSS-only feedback; no permanent compositor layers or layout changes. */
+:root {
+  --interaction-duration: 250ms;
+  --interaction-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+:where(a, button, select, [class~="transition"], [class~="transition-colors"], [class~="transition-all"]) {
+  transition-property: transform, opacity, color, background-color, border-color;
+  transition-duration: var(--interaction-duration);
+  transition-timing-function: var(--interaction-ease);
+}
+.interaction-control:not(:disabled):not([aria-disabled="true"]):active {
+  transform: translateY(1px);
+}
+.interaction-nav { position: relative; }
+.interaction-nav::after {
+  content: "";
+  position: absolute;
+  inset-inline: 12px;
+  bottom: 4px;
+  height: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--interaction-duration) var(--interaction-ease);
+}
+.interaction-nav[aria-current="page"]::after { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .interaction-control:not(:disabled):not([aria-disabled="true"]):hover {
+    transform: translateY(-2px);
+  }
+  .interaction-nav:hover::after { transform: scaleX(1); }
+  .interaction-upload:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .interaction-control, .interaction-upload, .interaction-nav::after {
+    transform: none !important;
+    transition: none !important;
+  }
+}

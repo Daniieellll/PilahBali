@@ -57,7 +57,7 @@ function Scanner() {
           onDragLeave={() => setDrag(false)}
           onDrop={(e) => { e.preventDefault(); setDrag(false); load(e.dataTransfer.files[0]); }}
           onClick={() => input.current?.click()}
-          className={`grid min-h-80 cursor-pointer place-items-center rounded-3xl border-2 border-dashed p-8 text-center transition ${drag ? "border-primary bg-secondary" : "border-border bg-card hover:border-primary/50"}`}
+          className={`interaction-upload grid min-h-80 cursor-pointer place-items-center rounded-3xl border-2 border-dashed p-8 text-center transition ${drag ? "border-primary bg-secondary" : "border-border bg-card hover:border-primary/50"}`}
         >
           <input ref={input} type="file" accept="image/*" hidden onChange={(e) => load(e.target.files?.[0])} />
           <div>
@@ -77,7 +77,7 @@ function Scanner() {
               <button onClick={() => { setPreview(null); setName(""); }} className="inline-flex items-center gap-1 hover:text-destructive"><Trash2 className="h-4 w-4" /> Hapus</button>
             </div>
           )}
-          <button disabled={!preview} onClick={analyze} className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40">
+          <button disabled={!preview} onClick={analyze} className="interaction-control mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40">
             <ScanLine className="h-5 w-5" /> Analisis Sampah
           </button>
         </div>
