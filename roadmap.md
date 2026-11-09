@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Optimize hover performance and verify desktop, touch and reduced-motion behavior
 - [x] Add state-driven scanner frame and accessible result transitions; verified real Gemini response, failed request, mobile and reduced motion
 - [ ] Redesign all pages with Modern Eco-Tech, responsive navigation, dark mode and ID/EN
 - [ ] Scanner camera, scanning states and real model confidence report
