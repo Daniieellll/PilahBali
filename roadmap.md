@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Optimize CSS-only hover feedback (250ms), remove header blur and card shadow animation; verified stable button dimensions, desktop navigation, 360px touch and reduced motion; 18 existing tests passed
 - [x] Add state-driven scanner frame and accessible result transitions; verified real Gemini response, failed request, mobile and reduced motion
 - [ ] Redesign all pages with Modern Eco-Tech, responsive navigation, dark mode and ID/EN
 - [ ] Scanner camera, scanning states and real model confidence report
